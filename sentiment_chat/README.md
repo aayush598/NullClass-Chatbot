@@ -40,18 +40,6 @@ This project is a **Sentiment Analysis Chatbot** built using **Streamlit** that 
 
 ---
 
-## **🚀 How to Run**
-
-1. Install dependencies:
-   ```sh
-   pip install -r requirements.txt
-   ```
-2. Run the app:
-   ```sh
-   streamlit run app.py
-   ```
-3. Open your browser to see the interactive chatbot UI.
-
 ## **👥 Contributing**
 
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create

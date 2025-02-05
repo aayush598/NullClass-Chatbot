@@ -43,40 +43,9 @@ Once all features are complete, they will be **integrated into a single applicat
 
 ---
 
-## 🛠️ Installation & Setup
+## 👉 Run Sentiment Analysis
 
-### **1️⃣ Setup Virtual Environment**
-
-```sh
-python -m venv venv
-```
-
-### **2️⃣ Activate Virtual Environment**
-
-Windows
-
-```sh
-venv\Scripts\activate
-```
-
-Mac/Linux
-
-```sh
-source venv/bin/activate
-```
-
-### **3️⃣ Install Dependencies**
-
-```sh
-pip install -r sentiment_chat/requirements.txt
-```
-
-## **🚀 Run the Sentiment Chatbot**
-
-```sh
-streamlit run sentiment_chat/app.py
-
-```
+To run the sentiment analysis feature, navigate to the `sentiment_chat` folder and follow the instructions in the `README.md` file there.
 
 ---
 
