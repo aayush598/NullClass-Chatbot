@@ -3,63 +3,59 @@ import sqlite3
 DB_NAME = "chatbot.db"
 
 def create_tables():
+    """Create database tables if not exists."""
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    
-    # Table to store chat interactions
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS chats (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_input TEXT,
-        chatbot_response TEXT,
-        sentiment TEXT,
-        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-    )''')
-    
-    # Table for analytics (e.g., most common topics)
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS analytics (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        query_count INTEGER DEFAULT 0,
-        positive_count INTEGER DEFAULT 0,
-        negative_count INTEGER DEFAULT 0,
-        neutral_count INTEGER DEFAULT 0
-    )''')
-
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS chats (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_message TEXT,
+            ai_response TEXT,
+            sentiment TEXT
+        )
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS analytics (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            sentiment TEXT,
+            count INTEGER DEFAULT 1
+        )
+    """)
     conn.commit()
     conn.close()
 
-def insert_chat(user_input, chatbot_response, sentiment):
+def insert_chat(user_message, ai_response, sentiment):
+    """Insert chat record into the database."""
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    
-    cursor.execute("INSERT INTO chats (user_input, chatbot_response, sentiment) VALUES (?, ?, ?)", 
-                   (user_input, chatbot_response, sentiment))
-    
+    cursor.execute("INSERT INTO chats (user_message, ai_response, sentiment) VALUES (?, ?, ?)", 
+                   (user_message, ai_response, sentiment))
     conn.commit()
     conn.close()
 
 def update_analytics(sentiment):
+    """Update sentiment analytics."""
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    
-    cursor.execute("SELECT query_count FROM analytics WHERE id = 1")
+
+    cursor.execute("SELECT count FROM analytics WHERE sentiment = ?", (sentiment,))
     row = cursor.fetchone()
-    
-    if row is None:
-        cursor.execute("INSERT INTO analytics (query_count, positive_count, negative_count, neutral_count) VALUES (1, 0, 0, 0)")
+    if row:
+        cursor.execute("UPDATE analytics SET count = count + 1 WHERE sentiment = ?", (sentiment,))
     else:
-        query_count = row[0] + 1
-        cursor.execute("UPDATE analytics SET query_count = ? WHERE id = 1", (query_count,))
-    
-    if sentiment == "positive":
-        cursor.execute("UPDATE analytics SET positive_count = positive_count + 1 WHERE id = 1")
-    elif sentiment == "negative":
-        cursor.execute("UPDATE analytics SET negative_count = negative_count + 1 WHERE id = 1")
-    else:
-        cursor.execute("UPDATE analytics SET neutral_count = neutral_count + 1 WHERE id = 1")
+        cursor.execute("INSERT INTO analytics (sentiment, count) VALUES (?, 1)", (sentiment,))
     
     conn.commit()
     conn.close()
 
-create_tables()  # Initialize DB tables
+def get_analytics():
+    """Fetch sentiment analytics."""
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute("SELECT sentiment, count FROM analytics")
+    data = cursor.fetchall()
+    conn.close()
+
+    return [{"sentiment": row[0], "count": row[1]} for row in data]
+
+create_tables()
