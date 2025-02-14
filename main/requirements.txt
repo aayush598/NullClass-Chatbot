@@ -1,0 +1,8 @@
+flask
+streamlit
+requests
+google-generativeai
+transformers
+torch
+pandas
+dotenv
