@@ -15,4 +15,4 @@ services:
     startCommand: streamlit run frontend.py --server.port 10001 --server.address 0.0.0.0
     envVars:
       - key: BACKEND_URL
-        value: "https://chatbot-backend.onrender.com"
+        value: "https://nullclass-chatbot.onrender.com"
