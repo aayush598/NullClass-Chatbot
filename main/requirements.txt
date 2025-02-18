@@ -1,6 +1,5 @@
 flask
 requests
-sqlite3
 streamlit
 pandas
 matplotlib
