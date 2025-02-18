@@ -27,6 +27,8 @@ if st.button("Send"):
         st.write("🤖 AI Response:", response_data.get("response"))
         if "sentiment" in response_data:
             st.write("📝 Sentiment:", response_data.get("sentiment"))
+        if "topic" in response_data:
+            st.write("🏷️ Topic:", response_data.get("topic"))
     else:
         st.write("⚠️ Error:", response.text)
 
