@@ -1,8 +1,7 @@
 flask
-streamlit
 requests
-google-generativeai
-transformers
-torch
+sqlite3
+streamlit
 pandas
-dotenv
+matplotlib
+gunicorn

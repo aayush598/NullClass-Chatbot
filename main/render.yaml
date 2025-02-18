@@ -1,0 +1,18 @@
+services:
+  - name: chatbot-backend
+    type: web
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -b 0.0.0.0:10000 app:app
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false # Set manually in Render's environment settings
+
+  - name: chatbot-frontend
+    type: web
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run frontend.py --server.port 10001 --server.address 0.0.0.0
+    envVars:
+      - key: BACKEND_URL
+        value: "https://chatbot-backend.onrender.com"
