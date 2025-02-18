@@ -31,16 +31,26 @@ if st.button("Send"):
         st.write("⚠️ Error:", response.text)
 
 # Display Analytics
-st.subheader("📊 Sentiment Analytics")
+st.subheader("📊 Chatbot Analytics")
 
 if st.button("Show Analytics"):
     response = requests.get(f"{BACKEND_URL}/analytics")
     if response.status_code == 200:
         analytics_data = response.json()
-
+        
         if analytics_data:
             df = pd.DataFrame(analytics_data)
-            st.bar_chart(df.set_index("sentiment"))
+            st.write("### Query Metrics")
+            st.bar_chart(df[df["metric"].str.contains("total_queries")].set_index("metric"))
+            
+            st.write("### Sentiment Distribution")
+            sentiment_df = df[df["metric"].str.contains("sentiment_")]
+            st.bar_chart(sentiment_df.set_index("metric"))
+            
+            st.write("### Common Topics")
+            topic_df = df[df["metric"].str.contains("topic_")]
+            st.bar_chart(topic_df.set_index("metric"))
+            
         else:
             st.write("📉 No analytics data available yet.")
     else:
